@@ -1,75 +1,143 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, TextInput, View, Pressable } from 'react-native';
+import { useRouter } from 'expo-router';
 
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import { Colors } from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function HomeScreen() {
+  const router = useRouter();
+  const theme = useColorScheme() ?? 'light';
+  const [pin, setPin] = useState('');
+  const tint = Colors[theme].tint;
+
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
+      headerBackgroundColor={{ light: '#F3F6FF', dark: '#162032' }}
+      headerImage={<ThemedView />}
+    >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
+        <ThemedText type="title">TailorMitra</ThemedText>
+        <ThemedText>Find nearby tailors. Book easily.</ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
+
+      <View style={styles.card}>
+        <ThemedText type="subtitle">Quick actions</ThemedText>
+        <View style={styles.row}>
+          <ActionTile
+            title="Search Map"
+            iconName="paperplane.fill"
+            color={tint}
+            onPress={() => router.push('/(tabs)/explore' as any)}
+          />
+          <ActionTile
+            title="My Bookings"
+            iconName="bookmark.fill"
+            color={tint}
+            onPress={() => router.push('/(tabs)/bookings' as any)}
+          />
+        </View>
+        <View style={styles.row}>
+          <ActionTile
+            title="Profile"
+            iconName="person.fill"
+            color={tint}
+            onPress={() => router.push('/(tabs)/profile' as any)}
+          />
+          <ActionTile
+            title="Sign In"
+            iconName="chevron.right"
+            color={tint}
+            onPress={() => router.push('/(auth)/signin' as any)}
+          />
+        </View>
+      </View>
+
+      <View style={styles.card}>
+        <ThemedText type="subtitle">Search by PIN</ThemedText>
+        <View style={styles.pinRow}>
+          <TextInput
+            value={pin}
+            onChangeText={setPin}
+            placeholder="Enter 6-digit PIN"
+            keyboardType="number-pad"
+            maxLength={6}
+            style={styles.input}
+          />
+          <Pressable
+            onPress={() => router.push({ pathname: '/(tabs)/explore', params: { pin } } as any)}
+            style={[styles.pinBtn, { backgroundColor: tint }]}
+          >
+            <ThemedText style={styles.pinBtnText}>Go</ThemedText>
+          </Pressable>
+        </View>
+      </View>
     </ParallaxScrollView>
+  );
+}
+
+function ActionTile({
+  title,
+  iconName,
+  color,
+  onPress,
+}: {
+  title: string;
+  iconName: 'paperplane.fill' | 'bookmark.fill' | 'person.fill' | 'chevron.right';
+  color: string;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable onPress={onPress} style={styles.tile}>
+      <IconSymbol name={iconName} color={color} size={28} />
+      <ThemedText>{title}</ThemedText>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   titleContainer: {
+    gap: 6,
+    marginBottom: 12,
+  },
+  row: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 8,
+  },
+  card: {
+    gap: 8,
+    marginBottom: 12,
+  },
+  tile: {
+    flex: 1,
+    padding: 14,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#ddd',
+    alignItems: 'center',
+    gap: 6,
+  },
+  pinRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  input: {
+    flex: 1,
+    height: 44,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    backgroundColor: '#fff',
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  pinBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 10,
   },
+  pinBtnText: { color: '#fff', fontWeight: '600' },
 });

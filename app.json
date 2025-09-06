@@ -4,7 +4,7 @@
     "slug": "TailorMitra",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/ChatGPT Image Sep 5, 2025, 10_27_17 PM.png",
     "scheme": "tailormitra",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,10 +13,11 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/ChatGPT Image Sep 5, 2025, 10_27_17 PM.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.rock45k.TailorMitra"
     },
     "web": {
       "bundler": "metro",
@@ -37,6 +38,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "EXPO_PUBLIC_SUPABASE_URL": "https://tqcasvbuhzkuncmkbzku.supabase.co",
+      "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxY2FzdmJ1aHprdW5jbWtiemt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwOTI4NDksImV4cCI6MjA3MjY2ODg0OX0.iTOCCVMD94UiI_jNgjvp0tbj_Ns3A5nIBk7RWl6_p0U",
+      "router": {},
+      "eas": {
+        "projectId": "e4008dc2-1800-4830-83bf-ad52330c2d40"
+      }
     }
   }
 }
